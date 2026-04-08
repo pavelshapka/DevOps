@@ -36,6 +36,9 @@ services:
     restart: "no"
 
   my-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: my-app
     container_name: my-app
     working_dir: /app
