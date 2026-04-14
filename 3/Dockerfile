@@ -1,26 +1,21 @@
 # Build stage
-FROM golang:1.22-alpine AS build
+FROM alpine:3.23 AS build
 
-WORKDIR /src
+RUN apk add --no-cache go && rm -rf /var/cache/apk/*
 
-COPY app/go.mod ./app/go.mod
-COPY app/go.sum* ./app/
-WORKDIR /src/app
-RUN go mod download
-
+WORKDIR /app
 COPY app/ ./
-RUN go build -o /out/app .
+RUN go mod download && go build -o /app/bin .
 
 
 # App stage
-FROM alpine:3.20 AS app
-RUN addgroup -S app && adduser -S -G app -h /app app
+FROM alpine:3.23
 
-WORKDIR /app
+RUN mkdir -p /app
+COPY --from=build /app/bin /app/bin
 
-COPY --from=build /out/app /bin/app
-
-USER app
+RUN adduser -S -D -H -u 10001 appuser
+USER appuser
 
 ENV APP_HOST=0.0.0.0 \
     APP_PORT=8080 \
@@ -29,4 +24,4 @@ ENV APP_HOST=0.0.0.0 \
 
 EXPOSE 8080
 
-ENTRYPOINT ["/bin/app"]
+ENTRYPOINT ["/app/bin"]
