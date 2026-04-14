@@ -1,0 +1,33 @@
+services:
+  system:
+    image: system-img
+    build:
+      context: .
+      dockerfile: system
+
+  build:
+    image: build-img
+    build:
+      context: .
+      dockerfile: build
+      additional_contexts:
+        system: "service:system"
+    depends_on:
+      - system
+
+  app:
+    image: app-img
+    build:
+      context: .
+      dockerfile: run
+      additional_contexts:
+        build: "service:build"
+    depends_on:
+      - build
+    ports:
+      - "8080:8080"
+    environment:
+      APP_HOST: 0.0.0.0
+      APP_PORT: "8080"
+      APP_READ_HEADER_TIMEOUT_SEC: "5"
+      APP_SHUTDOWN_TIMEOUT_SEC: "10"

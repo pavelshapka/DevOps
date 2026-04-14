@@ -1,0 +1,9 @@
+FROM system
+
+WORKDIR /app
+COPY app/go.mod ./go.mod
+COPY app/go.sum* ./
+RUN go mod download
+
+COPY app/ ./
+RUN go build -o /app/bin .
