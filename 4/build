@@ -1,4 +1,5 @@
-FROM system
+ARG SYSTEM_IMAGE=system-img
+FROM ${SYSTEM_IMAGE}
 
 WORKDIR /app
 COPY app/go.mod ./go.mod

@@ -1,7 +1,7 @@
 Запуск:
 
 ```bash
-docker compose up --build
+docker compose build system && docker compose build build && docker compose up app
 ```
 
 Проверка:

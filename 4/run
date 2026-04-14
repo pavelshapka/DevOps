@@ -1,3 +1,6 @@
+ARG BUILD_IMAGE=build-img
+FROM ${BUILD_IMAGE} AS build
+
 FROM alpine:3.23
 
 RUN mkdir -p /app

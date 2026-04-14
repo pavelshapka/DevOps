@@ -10,8 +10,8 @@ services:
     build:
       context: .
       dockerfile: build
-      additional_contexts:
-        system: "service:system"
+      args:
+        SYSTEM_IMAGE: system-img
     depends_on:
       - system
 
@@ -20,8 +20,8 @@ services:
     build:
       context: .
       dockerfile: run
-      additional_contexts:
-        build: "service:build"
+      args:
+        BUILD_IMAGE: build-img
     depends_on:
       - build
     ports:
