@@ -4,8 +4,12 @@ FROM alpine:3.23 AS build
 RUN apk add --no-cache go=1.25.9-r0 && rm -rf /var/cache/apk/*
 
 WORKDIR /app
+COPY app/go.mod ./go.mod
+COPY app/go.sum* ./
+RUN go mod download
+
 COPY app/ ./
-RUN go mod download && go build -o /app/bin .
+RUN go build -o /app/bin .
 
 # App stage
 FROM alpine:3.23

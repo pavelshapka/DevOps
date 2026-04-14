@@ -12,6 +12,8 @@ import (
 	"time"
 )
 
+// test caching
+
 func getenv(key, def string) string {
 	v := os.Getenv(key)
 	if v == "" {
