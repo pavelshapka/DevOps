@@ -1,0 +1,24 @@
+services:
+  system:
+    image: system-img
+    build:
+      context: .
+      dockerfile: system
+
+  build:
+    image: build-img
+    build:
+      context: .
+      dockerfile: v2/build
+      additional_contexts:
+        system: "service:system"
+
+  app:
+    image: app-img
+    build:
+      context: .
+      dockerfile: v2/run
+      additional_contexts:
+        build: "service:build"
+    ports:
+      - "8080:8080"
