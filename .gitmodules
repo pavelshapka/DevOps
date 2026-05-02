@@ -1,6 +1,3 @@
-[submodule "6/devops-ci-module"]
-	path = 6/devops-ci-module
-	url = https://gitlab.com/shapka.pa/devops-ci-module.git
-[submodule "6/devops-ci-app"]
-	path = 6/devops-ci-app
-	url = https://gitlab.com/shapka.pa/devops-ci-app.git
+[submodule "7/devops-cicd-app"]
+	path = 7/devops-cicd-app
+	url = https://gitlab.com/shapka.pa/devops-cicd-app.git
