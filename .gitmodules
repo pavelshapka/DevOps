@@ -1,0 +1,6 @@
+[submodule "5/react-spring-app/react-frontend"]
+	path = 5/react-spring-app/react-frontend
+	url = git@github.com:NeKita30/react-frontend.git
+[submodule "5/react-spring-app/spring-backend"]
+	path = 5/react-spring-app/spring-backend
+	url = git@github.com:NeKita30/spring-backend.git
