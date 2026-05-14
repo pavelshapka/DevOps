@@ -2,7 +2,7 @@ services:
   mysql:
     image: mysql:9.6
     env_file:
-      - ./react-spring-app/.env
+      - ./env/.mysql_env
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -21,28 +21,46 @@ services:
       - ./proxy_nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       frontend:
-        condition: service_started
+        condition: service_healthy
       backend:
-        condition: service_started
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 
   frontend:
     build:
       context: ./react-spring-app/react-frontend/
       dockerfile: Dockerfile
     env_file:
-      - ./react-spring-app/react-frontend/.env
+      - ./env/.frontend_env
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
 
   backend:
     build:
       context: ./react-spring-app/spring-backend/
       dockerfile: Dockerfile
     env_file:
-      - ./react-spring-app/.env
+      - ./env/.backend_env
     environment:
       - DB_HOST=mysql
     depends_on:
       mysql:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/actuator/health/liveness"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 90s
 
 volumes:
   mysql_data:
