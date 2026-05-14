@@ -6,6 +6,13 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
   nginx-proxy:
     image: nginx:alpine
     ports:
@@ -13,8 +20,10 @@ services:
     volumes:
       - ./proxy_nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - frontend
-      - backend
+      frontend:
+        condition: service_started
+      backend:
+        condition: service_started
 
   frontend:
     build:
@@ -32,7 +41,8 @@ services:
     environment:
       - DB_HOST=mysql
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
 volumes:
   mysql_data:
